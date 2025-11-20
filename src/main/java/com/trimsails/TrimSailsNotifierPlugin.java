@@ -33,6 +33,10 @@ public class TrimSailsNotifierPlugin extends Plugin
     @Inject
     private TrimSailsNotifierConfig config;
 
+    /**
+     * Track whether 'Trim sails' was available on the previous tick,
+     * so we only notify on the transition from not-available -> available.
+     */
     private boolean trimSailsAvailableLastTick = false;
 
     @Override
@@ -61,6 +65,7 @@ public class TrimSailsNotifierPlugin extends Plugin
                 .filter(option -> option != null)
                 .anyMatch(option -> option.equalsIgnoreCase(TRIM_SAILS_OPTION));
 
+        // Only notify when it *becomes* available
         if (trimSailsAvailableNow && !trimSailsAvailableLastTick && config.enableNotification())
         {
             notifier.notify(config.notificationMessage());
